@@ -36,7 +36,18 @@ public:
 	int separador; // es el separador en pixeles por cada opcion del menu
 
 	/* Pantalla = 1 (juego - gameplay) */
-
-
+	ALLEGRO_BITMAP *fondoMap; // el fondo del mapa 
+	ALLEGRO_BITMAP *O; // imagen de O (jugador)
+	ALLEGRO_BITMAP *X; // Imagen de X (IA)
+	ALLEGRO_FONT *fuente2; // fuente para mostrar anuncios
+	char mapa[3][3]; // el mapa char de 3x3
+	bool turn; // turn = true(jugador), turn = false (IA) 
+	int max(int value1, int value2); // devuelve el mayor de los dos numeros
+	int min(int value1, int value2); // devuelve el menor de los dos numeros
+	bool quedanMovimientos(char board[3][3]); // función que mira si hay movimientos o no, (espacios en blanco)
+	void mover(char board[3][3]); // función que mueve la IA 
+	int evaluar(char board[3][3]); // evalua quien gana la IA (10) o el jugador (-10) 
+	int minimax(char board[3][3], int prof, bool turno); // algoritmo minimax(recursivo) board, profundidad y el turno
+	void imprimir(); // imprimir el tablero en la consola
 };
 
