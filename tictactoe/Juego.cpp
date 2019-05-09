@@ -2,10 +2,10 @@
 #include "Juego.h"
 
 void Juego::initialize() {
+	dibujar = true;
 	// inicializando las variable dependiendo de la pantalla
 	switch (pantalla) {
 	case 0:
-		dibujar = true;
 		menu = std::vector <std::string>();
 		break;
 	}
@@ -24,6 +24,12 @@ void Juego::loadContent() {
 		posYMenu = 145;
 		separador = 55;
 		select = -1; // -1 seleccionado ninguno
+		break;
+	case 1:
+		fuente = al_load_font("Patchwork Stitchlings.ttf", 15, NULL);
+		break;
+	case 2:
+		fuente = al_load_font("Patchwork Stitchlings.ttf", 15, NULL);
 		break;
 	}
 
@@ -73,6 +79,35 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 			}
 		}
 		break;
+	case 1:
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		{
+			if (ev.mouse.button & 1)
+			{
+				int mouseY = ev.mouse.y;
+				int mouseX = ev.mouse.x;
+				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
+					cambiarPantalla(0);
+				}
+
+			}
+		}
+
+		break;
+	case 2:
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		{
+			if (ev.mouse.button & 1)
+			{
+				int mouseY = ev.mouse.y;
+				int mouseX = ev.mouse.x;
+				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
+					cambiarPantalla(0);
+				}
+			}
+		}
+
+		break;
 	}
 	
 }
@@ -91,7 +126,10 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 		}
 		break;
 	case 1:
-
+		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
+		break;
+	case 2:
+		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
 		break;
 	}
 }
@@ -100,6 +138,13 @@ void Juego::unLoadContent() {
 	// quitar el contenido dependiendo de la pantalla
 	switch (pantalla) {
 	case 0:
+		menu.clear();
+		al_destroy_font(fuente);
+		break;
+	case 1:
+		al_destroy_font(fuente);
+		break;
+	case 2:
 		al_destroy_font(fuente);
 		break;
 	}
@@ -110,7 +155,6 @@ void Juego::cambiarPantalla(int pantalla) {
 	this->pantalla = pantalla;
 	this->initialize();
 	this->loadContent();
-	dibujar = true;
 }
 
 Juego &Juego::GetInstance()

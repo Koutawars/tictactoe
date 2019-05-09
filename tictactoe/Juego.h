@@ -35,5 +35,8 @@ public:
 	int posYMenu; // la posición Y desde el 0,0 de la ventana
 	int separador; // es el separador en pixeles por cada opcion del menu
 
+	/* Pantalla = 1 (juego - gameplay) */
+
+
 };
 
