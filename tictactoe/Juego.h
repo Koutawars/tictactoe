@@ -30,6 +30,7 @@ public:
 	/* Pantalla = 0 (menu) */
 	std::vector <std::string> menu; // vector del opciones del menu (texto)
 	ALLEGRO_FONT *fuente; // fuente que se utilizará para imprimir el menu en pantalla
+	ALLEGRO_BITMAP *fondoMenu; // el fondo del menu
 	int select; // guarda el indice que brilla cuando pasa el mouse encima del vector del menu
 	int posXMenu; // la posición X desde el 0,0 de la ventana
 	int posYMenu; // la posición Y desde el 0,0 de la ventana

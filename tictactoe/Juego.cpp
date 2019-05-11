@@ -20,6 +20,7 @@ void Juego::loadContent() {
 	switch (pantalla) {
 	case 0:
 		fuente = al_load_font("LemonMilkbold.otf", 38, NULL);
+		fondoMenu = al_load_bitmap("fondoMenu.png");
 		menu.push_back("Iniciar");
 		menu.push_back("Detalles");
 		menu.push_back("Salir");
@@ -42,6 +43,7 @@ void Juego::loadContent() {
 		break;
 	case 2:
 		fuente = al_load_font("LemonMilkbold.otf", 30, NULL);
+		fuente2 = al_load_font("LemonMilkbold.otf", 17, NULL);
 		break;
 	}
 
@@ -113,10 +115,12 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 					int posX = 141, posY = 55, casi = 105, tam = 13;
 					for (int i = 0; i < 3; i++) {
 						for (int j = 0; j < 3; j++) {
-							if (posX + (j * casi) + tam * (j + 1) < mouseX && posX + (j * casi) + tam * (j + 1) + casi > mouseX && posY + (i * casi) + tam * (i + 1) < mouseY && posY + (i * casi) + tam * (i + 1) + casi > mouseY) {
-								mapa[i][j] = 'o';
-								turn = false;
-								dibujar = true;
+							if (mapa[i][j] == ' ') {
+								if (posX + (j * casi) + tam * (j + 1) < mouseX && posX + (j * casi) + tam * (j + 1) + casi > mouseX && posY + (i * casi) + tam * (i + 1) < mouseY && posY + (i * casi) + tam * (i + 1) + casi > mouseY) {
+									mapa[i][j] = 'o';
+									turn = false;
+									dibujar = true;
+								}
 							}
 						}
 					}
@@ -153,6 +157,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 	// dibujar dependiendo de la pantalla
 	switch (pantalla) {
 	case 0:
+		al_draw_bitmap(fondoMenu, 0, 0, NULL);
 		for (int i = 0; i < menu.size(); i++) {
 			if (select == i) {
 				al_draw_text(fuente, al_map_rgb(0, 255, 255), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
@@ -212,6 +217,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 		break;
 	case 2:
 		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
+		al_draw_multiline_text(fuente2, al_map_rgb(255, 255, 255), 310, 100, 520, 30, ALLEGRO_ALIGN_CENTER, "Tres en rayas, Gato, tictactoe o triqui es un juego donde un jugador gana si coloca tres en linea del mismo simbolo, este juego tiene una inteligencia artificial hecha utilizando el algoritmo del minimax. \n Desarrollado por: \nJorge Alberto Silva Zambrano - 2013214121\nAndres Alberto Ibarra Paez - 2016114069\nAndres Felipe Brieva Pinedo 2016214048\n");
 		break;
 	}
 }
@@ -222,6 +228,7 @@ void Juego::unLoadContent() {
 	case 0:
 		menu.clear();
 		al_destroy_font(fuente);
+		al_destroy_bitmap(fondoMenu);
 		break;
 	case 1:
 		al_destroy_bitmap(fondoMap);
@@ -233,6 +240,7 @@ void Juego::unLoadContent() {
 		break;
 	case 2:
 		al_destroy_font(fuente);
+		al_destroy_font(fuente2);
 		break;
 	}
 }
