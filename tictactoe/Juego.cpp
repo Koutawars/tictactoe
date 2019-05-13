@@ -287,7 +287,9 @@ void Juego::mover(char board[3][3]) {
 
 int Juego::minimax(char board[3][3], int prof, bool turno) {
 	int value = evaluar(board); // 10 = gana IA, -10 = gana jugador
-	if (value == 10 || value == -10) return value;
+	//if (value == 10 || value == -10) return value; // otra forma de hacerlo, esto no importa el numero de pasos
+	if (value == 10) return value - prof;
+	if (value == -10) return value + prof;
 	if (!quedanMovimientos(board)) return 0; // empate (no quedan movimientos)
 
 	// turno = true (IA - X), turno = false (jugador - O)
