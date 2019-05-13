@@ -217,7 +217,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 		break;
 	case 2:
 		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
-		al_draw_multiline_text(fuente2, al_map_rgb(255, 255, 255), 310, 100, 520, 30, ALLEGRO_ALIGN_CENTER, "Tres en rayas, Gato, tictactoe o triqui es un juego donde un jugador gana si coloca tres en linea del mismo simbolo, este juego tiene una inteligencia artificial hecha utilizando el algoritmo del minimax. \n Desarrollado por: \nJorge Alberto Silva Zambrano - 2013214121\nAndres Alberto Ibarra Paez - 2016114069\nAndres Felipe Brieva Pinedo 2016214048\n");
+		al_draw_multiline_text(fuente2, al_map_rgb(255, 255, 255), 310, 100, 520, 30, ALLEGRO_ALIGN_CENTER, "Tres en rayas, Gato, tictactoe o triqui es un juego donde un jugador gana si coloca tres en linea del mismo simbolo, este juego tiene una inteligencia artificial hecha con el algoritmo del minimax. \n Desarrollado por: \nJorge Alberto Silva Zambrano - 2013214121\nAndres Alberto Ibarra Paez - 2016114069\nAndres Felipe Brieva Pinedo 2016214048\n");
 		break;
 	}
 }
