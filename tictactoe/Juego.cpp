@@ -300,6 +300,7 @@ int Juego::minimax(char board[3][3], int prof, bool turno) {
 				if (board[i][j] == ' ') {
 					board[i][j] = 'x';
 					eval = minimax(board, prof + 1, false);
+
 					maxEval = max(eval, maxEval);
 					board[i][j] = ' ';
 				}
