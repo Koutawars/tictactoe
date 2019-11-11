@@ -22,8 +22,8 @@ int main()
 
 	al_init_font_addon();
 	al_init_ttf_addon();
-	Juego::GetInstance().initialize();
-	Juego::GetInstance().cargar();
+	Juego::GetInstance().inicializar();
+	Juego::GetInstance().cargarContenido();
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	ALLEGRO_TIMER *timer = al_create_timer(1.0f);

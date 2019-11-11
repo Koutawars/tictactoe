@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Juego.h"
 
-void Juego::initialize() {
+void Juego::inicializar() {
 	dibujar = true;
 	// inicializando las variable dependiendo de la screen
 	if (screen == 0) {
@@ -12,7 +12,7 @@ void Juego::initialize() {
 	}
 }
 
-void Juego::cargar() {
+void Juego::cargarContenido() {
 	// cargando el contenido dependiendo de la screen
 	if (screen == 0) {
 		tipo_de_letra = al_load_font("Legend M54.ttf", 38, NULL);
@@ -52,7 +52,7 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 					if (posicionTexto < mouseY && posicionTexto + entrelineado > mouseY) {
 						switch (i) {
 						case 0:
-							Mover_screen(1);
+							moverScreen(1);
 							break;
 						case 1:
 							*done = true;
@@ -87,7 +87,7 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 				int mouseY = ev.mouse.y;
 				int mouseX = ev.mouse.x;
 				if (0 < mouseX && 90 > mouseX && 0 < mouseY && 46 > mouseY) {
-					Mover_screen(0);
+					moverScreen(0);
 				}
 			}
 		}
@@ -156,7 +156,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Perdiste");
 				al_flip_display();
 				al_rest(2);
-				Mover_screen(1);
+				moverScreen(1);
 				pintar(display);
 			}
 			if (evaluar(mapa) == -10) {
@@ -166,7 +166,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Usaste hacks");
 				al_flip_display();
 				al_rest(2);
-				Mover_screen(1);
+				moverScreen(1);
 				pintar(display);
 			}
 			if (!quedanMovimientos(mapa)) {
@@ -176,7 +176,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Empate");
 				al_flip_display();
 				al_rest(2);
-				Mover_screen(1);
+				moverScreen(1);
 				pintar(display);
 			}
 		}
@@ -203,11 +203,11 @@ void Juego::DesCargar() {
 	}
 }
 
-void Juego::Mover_screen(int screen) {
+void Juego::moverScreen(int screen) {
 	this->DesCargar();
 	this->screen = screen;
-	this->initialize();
-	this->cargar();
+	this->inicializar();
+	this->cargarContenido();
 }
 
 void Juego::imprimir() {
@@ -281,24 +281,24 @@ int Juego::Algortimo_MiniMax(char board[3][3], int prof, bool turno) {
 	}
 }
 
-int Juego::evaluar(char board[3][3]) {
+int Juego::evaluar(char tablero[3][3]) {
 	int reg = 0;
-	if (board[0][0] == 'x' && board[0][1] == 'x' && board[0][2] == 'x') reg = 10;
-	if (board[0][0] == 'o' && board[0][1] == 'o' && board[0][2] == 'o') reg = -10;
-	if (board[1][0] == 'x' && board[1][1] == 'x' && board[1][2] == 'x') reg = 10;
-	if (board[1][0] == 'o' && board[1][1] == 'o' && board[1][2] == 'o') reg = -10;
-	if (board[2][0] == 'x' && board[2][1] == 'x' && board[2][2] == 'x') reg = 10;
-	if (board[2][0] == 'o' && board[2][1] == 'o' && board[2][2] == 'o') reg = -10;
-	if (board[0][0] == 'x' && board[1][0] == 'x' && board[2][0] == 'x') reg = 10;
-	if (board[0][0] == 'o' && board[1][0] == 'o' && board[2][0] == 'o') reg = -10;
-	if (board[0][1] == 'x' && board[1][1] == 'x' && board[2][1] == 'x') reg = 10;
-	if (board[0][1] == 'o' && board[1][1] == 'o' && board[2][1] == 'o') reg = -10;
-	if (board[0][2] == 'x' && board[1][2] == 'x' && board[2][2] == 'x') reg = 10;
-	if (board[0][2] == 'o' && board[1][2] == 'o' && board[2][2] == 'o') reg = -10;
-	if (board[0][0] == 'x' && board[1][1] == 'x' && board[2][2] == 'x') reg = 10;
-	if (board[0][0] == 'o' && board[1][1] == 'o' && board[2][2] == 'o') reg = -10;
-	if (board[0][2] == 'x' && board[1][1] == 'x' && board[2][0] == 'x') reg = 10;
-	if (board[0][2] == 'o' && board[1][1] == 'o' && board[2][0] == 'o') reg = -10;
+	if (tablero[0][0] == 'x' && tablero[0][1] == 'x' && tablero[0][2] == 'x') reg = 10;
+	if (tablero[0][0] == 'o' && tablero[0][1] == 'o' && tablero[0][2] == 'o') reg = -10;
+	if (tablero[1][0] == 'x' && tablero[1][1] == 'x' && tablero[1][2] == 'x') reg = 10;
+	if (tablero[1][0] == 'o' && tablero[1][1] == 'o' && tablero[1][2] == 'o') reg = -10;
+	if (tablero[2][0] == 'x' && tablero[2][1] == 'x' && tablero[2][2] == 'x') reg = 10;
+	if (tablero[2][0] == 'o' && tablero[2][1] == 'o' && tablero[2][2] == 'o') reg = -10;
+	if (tablero[0][0] == 'x' && tablero[1][0] == 'x' && tablero[2][0] == 'x') reg = 10;
+	if (tablero[0][0] == 'o' && tablero[1][0] == 'o' && tablero[2][0] == 'o') reg = -10;
+	if (tablero[0][1] == 'x' && tablero[1][1] == 'x' && tablero[2][1] == 'x') reg = 10;
+	if (tablero[0][1] == 'o' && tablero[1][1] == 'o' && tablero[2][1] == 'o') reg = -10;
+	if (tablero[0][2] == 'x' && tablero[1][2] == 'x' && tablero[2][2] == 'x') reg = 10;
+	if (tablero[0][2] == 'o' && tablero[1][2] == 'o' && tablero[2][2] == 'o') reg = -10;
+	if (tablero[0][0] == 'x' && tablero[1][1] == 'x' && tablero[2][2] == 'x') reg = 10;
+	if (tablero[0][0] == 'o' && tablero[1][1] == 'o' && tablero[2][2] == 'o') reg = -10;
+	if (tablero[0][2] == 'x' && tablero[1][1] == 'x' && tablero[2][0] == 'x') reg = 10;
+	if (tablero[0][2] == 'o' && tablero[1][1] == 'o' && tablero[2][0] == 'o') reg = -10;
 	return reg;
 }
 

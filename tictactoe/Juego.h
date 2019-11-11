@@ -5,7 +5,6 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
-
 #include <iostream>
 #include <vector>
 
@@ -18,12 +17,12 @@ public:
 
 	static Juego &GetInstance(); // función para obtener un objeto de su propia clase (singleton)
 
-	void initialize(); // función para inicializar variables
-	void cargar(); // función para cargar el contenido
+	void inicializar(); // función para inicializar variables
+	void cargarContenido(); // función para cargar el contenido
 	void DesCargar(); // función para quitar el contenido
 	void actualizar(ALLEGRO_EVENT ev, bool *done); // función para hacer calculos
 	void pintar(ALLEGRO_DISPLAY *display); // funcion para dibujar
-	void Mover_screen(int screen); // función para cambiar de screen
+	void moverScreen(int screen); // función para cambiar de screen
 	int screen = 0; // en la screen que te encuentras
 	bool dibujar; // true cuando se actualiza la screen
 
