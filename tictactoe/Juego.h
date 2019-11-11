@@ -19,36 +19,36 @@ public:
 	static Juego &GetInstance(); // función para obtener un objeto de su propia clase (singleton)
 
 	void initialize(); // función para inicializar variables
-	void loadContent(); // función para cargar el contenido
-	void unLoadContent(); // función para quitar el contenido
-	void update(ALLEGRO_EVENT ev, bool *done); // función para hacer calculos
-	void draw(ALLEGRO_DISPLAY *display); // funcion para dibujar
-	void cambiarPantalla(int pantalla); // función para cambiar de pantalla
-	int pantalla = 0; // en la pantalla que te encuentras
-	bool dibujar; // true cuando se actualiza la pantalla
+	void cargar(); // función para cargar el contenido
+	void DesCargar(); // función para quitar el contenido
+	void actualizar(ALLEGRO_EVENT ev, bool *done); // función para hacer calculos
+	void pintar(ALLEGRO_DISPLAY *display); // funcion para dibujar
+	void Mover_screen(int screen); // función para cambiar de screen
+	int screen = 0; // en la screen que te encuentras
+	bool dibujar; // true cuando se actualiza la screen
 
-	/* Pantalla = 0 (menu) */
-	std::vector <std::string> menu; // vector del opciones del menu (texto)
-	ALLEGRO_FONT *fuente; // fuente que se utilizará para imprimir el menu en pantalla
-	ALLEGRO_BITMAP *fondoMenu; // el fondo del menu
-	int select; // guarda el indice que brilla cuando pasa el mouse encima del vector del menu
-	int posXMenu; // la posición X desde el 0,0 de la ventana
-	int posYMenu; // la posición Y desde el 0,0 de la ventana
-	int separador; // es el separador en pixeles por cada opcion del menu
+	/* Pantalla = 0 (opciones) */
+	std::vector <std::string> opciones; // vector del opciones del opciones (texto)
+	ALLEGRO_FONT *tipo_de_letra; // tipo_de_letra que se utilizará para imprimir el opciones en screen
+	ALLEGRO_BITMAP *fondoMenu; // el fondo del opciones
+	int opcion_seleccionada; // guarda el indice que brilla cuando pasa el mouse encima del vector del opciones
+	int Menu_X_ubic; // la posición X desde el 0,0 de la ventana
+	int Menu_Y_ubic; // la posición Y desde el 0,0 de la ventana
+	int entrelineado; // es el entrelineado en pixeles por cada opcion del opciones
 
 	/* Pantalla = 1 (juego - gameplay) */
-	ALLEGRO_BITMAP *fondoMap; // el fondo del mapa 
+	ALLEGRO_BITMAP *Mapa_triquis; // el fondo del mapa 
 	ALLEGRO_BITMAP *O; // imagen de O (jugador)
 	ALLEGRO_BITMAP *X; // Imagen de X (IA)
-	ALLEGRO_FONT *fuente2; // fuente para mostrar anuncios
+	ALLEGRO_FONT *tipo_de_letra2; // tipo_de_letra para mostrar anuncios
 	char mapa[3][3]; // el mapa char de 3x3
-	bool turn; // turn = true(jugador), turn = false (IA) 
-	int max(int value1, int value2); // devuelve el mayor de los dos numeros
-	int min(int value1, int value2); // devuelve el menor de los dos numeros
+	bool isturno; // isturno = true(jugador), isturno = false (IA) 
+	int MAXIMO(int value1, int value2); // devuelve el mayor de los dos numeros
+	int MINIMO(int value1, int value2); // devuelve el menor de los dos numeros
 	bool quedanMovimientos(char board[3][3]); // función que mira si hay movimientos o no, (espacios en blanco)
-	void mover(char board[3][3]); // función que mueve la IA 
+	void Mov(char board[3][3]); // función que mueve la IA 
 	int evaluar(char board[3][3]); // evalua quien gana la IA (10) o el jugador (-10) 
-	int minimax(char board[3][3], int prof, bool turno); // algoritmo minimax(recursivo) board, profundidad y el turno
+	int Algortimo_MiniMax(char board[3][3], int prof, bool turno); // algoritmo Algortimo_MiniMax(recursivo) board, profundidad y el turno
 	void imprimir(); // imprimir el tablero en la consola
 };
 
