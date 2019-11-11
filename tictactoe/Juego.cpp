@@ -302,10 +302,10 @@ int Juego::evaluar(char tablero[3][3]) {
 	return reg;
 }
 
-bool Juego::quedanMovimientos(char board[3][3]) {
+bool Juego::quedanMovimientos(char tablero[3][3]) {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			if (board[i][j] == ' ')
+			if (tablero[i][j] == ' ')
 				return true;
 	return false;
 }
