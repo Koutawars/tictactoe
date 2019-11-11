@@ -4,21 +4,17 @@
 void Juego::initialize() {
 	dibujar = true;
 	// inicializando las variable dependiendo de la screen
-	switch (screen) {
-	case 0:
+	if (screen == 0) {
 		opciones = std::vector <std::string>();
-		break;
-	case 1:
-		isturno = true;
-		break;
 	}
-
+	else if (screen == 1) {
+		isturno = true;
+	}
 }
 
 void Juego::cargar() {
 	// cargando el contenido dependiendo de la screen
-	switch (screen) {
-	case 0:
+	if (screen == 0) {
 		tipo_de_letra = al_load_font("Legend M54.ttf", 38, NULL);
 		fondoMenu = al_load_bitmap("fondoMenu.png");
 		opciones.push_back("Iniciar");
@@ -27,8 +23,8 @@ void Juego::cargar() {
 		Menu_Y_ubic = 245;
 		entrelineado = 85;
 		opcion_seleccionada = -1; // -1 seleccionado ninguno
-		break;
-	case 1:
+	}
+	else if (screen == 1) {
 		tipo_de_letra = al_load_font("Legend M54.ttf", 30, NULL);
 		tipo_de_letra2 = al_load_font("Legend M54.ttf", 40, NULL);
 		Mapa_triquis = al_load_bitmap("mapa.png");
@@ -39,15 +35,13 @@ void Juego::cargar() {
 				mapa[i][j] = ' ';
 			}
 		}
-		break;
 	}
 
 }
 
 void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 	// actualizando dependiendo de la screen
-	switch (screen) {
-	case 0:
+	if (screen == 0) {
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			if (ev.mouse.button & 1)
@@ -84,8 +78,8 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 				dibujar = true;
 			}
 		}
-		break;
-	case 1:
+	}
+	else if (screen == 1) {
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			if (ev.mouse.button & 1)
@@ -125,24 +119,21 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 			dibujar = true;
 			isturno = true;
 		}
-
-		break;
 	}
 	
 }
 
 void Juego::pintar(ALLEGRO_DISPLAY *display) {
 	// dibujar dependiendo de la screen
-	switch (screen) {
-	case 0:
+	if (screen == 0) {
 		al_draw_bitmap(fondoMenu, 0, 0, NULL);
 		for (int i = 0; i < opciones.size(); i++) {
-		
+
 			al_draw_text(tipo_de_letra, al_map_rgb(0, 0, 0), Menu_X_ubic, (i * entrelineado) + Menu_Y_ubic, NULL, opciones[i].c_str());
-		
+
 		}
-		break;
-	case 1: 
+	}
+	else if (screen == 1) {
 		{
 			al_draw_bitmap(Mapa_triquis, 0, 0, NULL);
 			al_draw_text(tipo_de_letra, al_map_rgb(0, 0, 0), 8, 8, NULL, "Atras");
@@ -153,7 +144,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 						al_draw_bitmap(X, posX + (j * casi) + tam * (j + 1), posY + (i * casi) + tam * (i + 1), NULL);
 					}
 					if (mapa[i][j] == 'o') {
-						al_draw_bitmap(O, posX + (j * casi) + tam*(j + 1), posY + (i * casi) + tam * (i + 1), NULL);
+						al_draw_bitmap(O, posX + (j * casi) + tam * (j + 1), posY + (i * casi) + tam * (i + 1), NULL);
 					}
 				}
 			}
@@ -189,30 +180,26 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				pintar(display);
 			}
 		}
-		break;
 	}
 }
 
 void Juego::DesCargar() {
 	// quitar el contenido dependiendo de la screen
-	switch (screen) {
-	case 0:
+	if (screen == 0) {
 		opciones.clear();
 		al_destroy_font(tipo_de_letra);
 		al_destroy_bitmap(fondoMenu);
-		break;
-	case 1:
+	}
+	else if (screen == 1) {
 		al_destroy_bitmap(Mapa_triquis);
 		al_destroy_bitmap(X);
 		al_destroy_bitmap(O);
 		al_destroy_font(tipo_de_letra);
 		al_destroy_font(tipo_de_letra2);
-		
-		break;
-	case 2:
+	}
+	else if (screen == 2) {
 		al_destroy_font(tipo_de_letra);
 		al_destroy_font(tipo_de_letra2);
-		break;
 	}
 }
 
