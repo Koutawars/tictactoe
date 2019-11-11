@@ -3,36 +3,35 @@
 
 void Juego::initialize() {
 	dibujar = true;
-	// inicializando las variable dependiendo de la pantalla
-	switch (pantalla) {
+	// inicializando las variable dependiendo de la screen
+	switch (screen) {
 	case 0:
-		menu = std::vector <std::string>();
+		opciones = std::vector <std::string>();
 		break;
 	case 1:
-		turn = true;
+		isturno = true;
 		break;
 	}
 
 }
 
-void Juego::loadContent() {
-	// cargando el contenido dependiendo de la pantalla
-	switch (pantalla) {
+void Juego::cargar() {
+	// cargando el contenido dependiendo de la screen
+	switch (screen) {
 	case 0:
-		fuente = al_load_font("LemonMilkbold.otf", 38, NULL);
+		tipo_de_letra = al_load_font("Legend M54.ttf", 38, NULL);
 		fondoMenu = al_load_bitmap("fondoMenu.png");
-		menu.push_back("Iniciar");
-		menu.push_back("Detalles");
-		menu.push_back("Salir");
-		posXMenu = 30;
-		posYMenu = 145;
-		separador = 55;
-		select = -1; // -1 seleccionado ninguno
+		opciones.push_back("Iniciar");
+		opciones.push_back("Salir");
+		Menu_X_ubic = 380;
+		Menu_Y_ubic = 245;
+		entrelineado = 85;
+		opcion_seleccionada = -1; // -1 seleccionado ninguno
 		break;
 	case 1:
-		fuente = al_load_font("LemonMilkbold.otf", 30, NULL);
-		fuente2 = al_load_font("LemonMilkbold.otf", 40, NULL);
-		fondoMap = al_load_bitmap("mapa.png");
+		tipo_de_letra = al_load_font("Legend M54.ttf", 30, NULL);
+		tipo_de_letra2 = al_load_font("Legend M54.ttf", 40, NULL);
+		Mapa_triquis = al_load_bitmap("mapa.png");
 		O = al_load_bitmap("O.png");
 		X = al_load_bitmap("X.png");
 		for (int i = 0; i < 3; i++) {
@@ -41,34 +40,27 @@ void Juego::loadContent() {
 			}
 		}
 		break;
-	case 2:
-		fuente = al_load_font("LemonMilkbold.otf", 30, NULL);
-		fuente2 = al_load_font("LemonMilkbold.otf", 17, NULL);
-		break;
 	}
 
 }
 
-void Juego::update(ALLEGRO_EVENT ev, bool *done) {
-	// actualizando dependiendo de la pantalla
-	switch (pantalla) {
+void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
+	// actualizando dependiendo de la screen
+	switch (screen) {
 	case 0:
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			if (ev.mouse.button & 1)
 			{
 				int mouseY = ev.mouse.y;
-				for (int i = 0; i < menu.size(); i++) {
-					int posicionTexto = separador * i + posYMenu;
-					if (posicionTexto < mouseY && posicionTexto + separador > mouseY) {
+				for (int i = 0; i < opciones.size(); i++) {
+					int posicionTexto = entrelineado * i + Menu_Y_ubic;
+					if (posicionTexto < mouseY && posicionTexto + entrelineado > mouseY) {
 						switch (i) {
 						case 0:
-							cambiarPantalla(1);
+							Mover_screen(1);
 							break;
 						case 1:
-							cambiarPantalla(2);
-							break;
-						case 2:
 							*done = true;
 							break;
 						}
@@ -79,16 +71,16 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 		if (ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
 			int mouseY = ev.mouse.y;
 			bool encontrado = false;
-			for (int i = 0; i < menu.size(); i++) {
-				int posicionTexto = separador * i + posYMenu;
-				if (posicionTexto < mouseY && posicionTexto + separador > mouseY) {
-					select = i;
+			for (int i = 0; i < opciones.size(); i++) {
+				int posicionTexto = entrelineado * i + Menu_Y_ubic;
+				if (posicionTexto < mouseY && posicionTexto + entrelineado > mouseY) {
+					opcion_seleccionada = i;
 					dibujar = true;
 					encontrado = true;
 				}
 			}
-			if (!encontrado && select != -1) {
-				select = -1;
+			if (!encontrado && opcion_seleccionada != -1) {
+				opcion_seleccionada = -1;
 				dibujar = true;
 			}
 		}
@@ -100,12 +92,12 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 			{
 				int mouseY = ev.mouse.y;
 				int mouseX = ev.mouse.x;
-				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
-					cambiarPantalla(0);
+				if (0 < mouseX && 90 > mouseX && 0 < mouseY && 46 > mouseY) {
+					Mover_screen(0);
 				}
 			}
 		}
-		if (turn) {
+		if (isturno) {
 			if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 			{
 				if (ev.mouse.button & 1)
@@ -118,7 +110,7 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 							if (mapa[i][j] == ' ') {
 								if (posX + (j * casi) + tam * (j + 1) < mouseX && posX + (j * casi) + tam * (j + 1) + casi > mouseX && posY + (i * casi) + tam * (i + 1) < mouseY && posY + (i * casi) + tam * (i + 1) + casi > mouseY) {
 									mapa[i][j] = 'o';
-									turn = false;
+									isturno = false;
 									dibujar = true;
 								}
 							}
@@ -129,23 +121,9 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 		}
 		else {
 			al_rest(1);
-			mover(mapa);
+			Mov(mapa);
 			dibujar = true;
-			turn = true;
-		}
-
-		break;
-	case 2:
-		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-		{
-			if (ev.mouse.button & 1)
-			{
-				int mouseY = ev.mouse.y;
-				int mouseX = ev.mouse.x;
-				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
-					cambiarPantalla(0);
-				}
-			}
+			isturno = true;
 		}
 
 		break;
@@ -153,24 +131,21 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 	
 }
 
-void Juego::draw(ALLEGRO_DISPLAY *display) {
-	// dibujar dependiendo de la pantalla
-	switch (pantalla) {
+void Juego::pintar(ALLEGRO_DISPLAY *display) {
+	// dibujar dependiendo de la screen
+	switch (screen) {
 	case 0:
 		al_draw_bitmap(fondoMenu, 0, 0, NULL);
-		for (int i = 0; i < menu.size(); i++) {
-			if (select == i) {
-				al_draw_text(fuente, al_map_rgb(0, 255, 255), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
-			}
-			else {
-				al_draw_text(fuente, al_map_rgb(255, 255, 255), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
-			}
+		for (int i = 0; i < opciones.size(); i++) {
+		
+			al_draw_text(tipo_de_letra, al_map_rgb(0, 0, 0), Menu_X_ubic, (i * entrelineado) + Menu_Y_ubic, NULL, opciones[i].c_str());
+		
 		}
 		break;
 	case 1: 
 		{
-			al_draw_bitmap(fondoMap, 0, 0, NULL);
-			al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
+			al_draw_bitmap(Mapa_triquis, 0, 0, NULL);
+			al_draw_text(tipo_de_letra, al_map_rgb(0, 0, 0), 8, 8, NULL, "Atras");
 			int posX = 141, posY = 55, casi = 105, tam = 13;
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
@@ -186,70 +161,66 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 			if (evaluar(mapa) == 10) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
-				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Perdiste");
+				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
+				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Perdiste");
 				al_flip_display();
 				al_rest(2);
-				cambiarPantalla(1);
-				draw(display);
+				Mover_screen(1);
+				pintar(display);
 			}
 			if (evaluar(mapa) == -10) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
-				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Usaste hacks");
+				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
+				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Usaste hacks");
 				al_flip_display();
 				al_rest(2);
-				cambiarPantalla(1);
-				draw(display);
+				Mover_screen(1);
+				pintar(display);
 			}
 			if (!quedanMovimientos(mapa)) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 200, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
-				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Empate");
+				al_draw_filled_rectangle(320 - 100, 200, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
+				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Empate");
 				al_flip_display();
 				al_rest(2);
-				cambiarPantalla(1);
-				draw(display);
+				Mover_screen(1);
+				pintar(display);
 			}
 		}
 		break;
-	case 2:
-		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
-		al_draw_multiline_text(fuente2, al_map_rgb(255, 255, 255), 310, 100, 520, 30, ALLEGRO_ALIGN_CENTER, "Tres en rayas, Gato, tictactoe o triqui es un juego donde un jugador gana si coloca tres en linea del mismo simbolo, este juego tiene una inteligencia artificial hecha con el algoritmo del minimax. \n Desarrollado por: \nJorge Alberto Silva Zambrano - 2013214121\nAndres Alberto Ibarra Paez - 2016114069\nAndres Felipe Brieva Pinedo 2016214048\n");
-		break;
 	}
 }
 
-void Juego::unLoadContent() {
-	// quitar el contenido dependiendo de la pantalla
-	switch (pantalla) {
+void Juego::DesCargar() {
+	// quitar el contenido dependiendo de la screen
+	switch (screen) {
 	case 0:
-		menu.clear();
-		al_destroy_font(fuente);
+		opciones.clear();
+		al_destroy_font(tipo_de_letra);
 		al_destroy_bitmap(fondoMenu);
 		break;
 	case 1:
-		al_destroy_bitmap(fondoMap);
+		al_destroy_bitmap(Mapa_triquis);
 		al_destroy_bitmap(X);
 		al_destroy_bitmap(O);
-		al_destroy_font(fuente);
-		al_destroy_font(fuente2);
+		al_destroy_font(tipo_de_letra);
+		al_destroy_font(tipo_de_letra2);
 		
 		break;
 	case 2:
-		al_destroy_font(fuente);
-		al_destroy_font(fuente2);
+		al_destroy_font(tipo_de_letra);
+		al_destroy_font(tipo_de_letra2);
 		break;
 	}
 }
 
-void Juego::cambiarPantalla(int pantalla) {
-	this->unLoadContent();
-	this->pantalla = pantalla;
+void Juego::Mover_screen(int screen) {
+	this->DesCargar();
+	this->screen = screen;
 	this->initialize();
-	this->loadContent();
+	this->cargar();
 }
 
 void Juego::imprimir() {
@@ -265,14 +236,14 @@ void Juego::imprimir() {
 
 }
 
-void Juego::mover(char board[3][3]) {
+void Juego::Mov(char board[3][3]) {
 	int maxEval = -99999, eval, moveI, moveJ;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			if (board[i][j] == ' ') {
 				board[i][j] = 'x';
-				eval = minimax(board, 0, false);
-				maxEval = max(eval, maxEval);
+				eval = Algortimo_MiniMax(board, 0, false);
+				maxEval = MAXIMO(eval, maxEval);
 				if (maxEval == eval) {
 					moveI = i;
 					moveJ = j;
@@ -285,7 +256,7 @@ void Juego::mover(char board[3][3]) {
 	dibujar = true;
 }
 
-int Juego::minimax(char board[3][3], int prof, bool turno) {
+int Juego::Algortimo_MiniMax(char board[3][3], int prof, bool turno) {
 	int value = evaluar(board); // 10 = gana IA, -10 = gana jugador
 	//if (value == 10 || value == -10) return value; // otra forma de hacerlo, esto no importa el numero de pasos
 	if (value == 10) return value - prof;
@@ -299,9 +270,8 @@ int Juego::minimax(char board[3][3], int prof, bool turno) {
 			for (int j = 0; j < 3; j++) {
 				if (board[i][j] == ' ') {
 					board[i][j] = 'x';
-					eval = minimax(board, prof + 1, false);
-
-					maxEval = max(eval, maxEval);
+					eval = Algortimo_MiniMax(board, prof + 1, false);
+					maxEval = MAXIMO(eval, maxEval);
 					board[i][j] = ' ';
 				}
 			}
@@ -314,8 +284,8 @@ int Juego::minimax(char board[3][3], int prof, bool turno) {
 			for (int j = 0; j < 3; j++) {
 				if (board[i][j] == ' ') {
 					board[i][j] = 'o';
-					eval = minimax(board, prof + 1, true);
-					minEval = min(eval, minEval);
+					eval = Algortimo_MiniMax(board, prof + 1, true);
+					minEval = MINIMO(eval, minEval);
 					board[i][j] = ' ';
 				}
 			}
@@ -353,11 +323,11 @@ bool Juego::quedanMovimientos(char board[3][3]) {
 	return false;
 }
 
-int Juego::max(int value1, int value2) {
+int Juego::MAXIMO(int value1, int value2) {
 	return value1 < value2 ? value2 : value1;
 }
 
-int Juego::min(int value1, int value2) {
+int Juego::MINIMO(int value1, int value2) {
 	return value1 > value2 ? value2 : value1;
 }
 

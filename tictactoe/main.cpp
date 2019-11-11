@@ -23,7 +23,7 @@ int main()
 	al_init_font_addon();
 	al_init_ttf_addon();
 	Juego::GetInstance().initialize();
-	Juego::GetInstance().loadContent();
+	Juego::GetInstance().cargar();
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	ALLEGRO_TIMER *timer = al_create_timer(1.0f);
@@ -42,9 +42,9 @@ int main()
 		al_wait_for_event(event_queue, &ev);
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			done = true;
-		Juego::GetInstance().update(ev, &done);
+		Juego::GetInstance().actualizar(ev, &done);
 		if (Juego::GetInstance().dibujar) {
-			Juego::GetInstance().draw(display);
+			Juego::GetInstance().pintar(display);
 			Juego::GetInstance().dibujar = false;
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -55,6 +55,6 @@ int main()
 		}
 	}
 
-	Juego::GetInstance().unLoadContent();
+	Juego::GetInstance().DesCargar();
 	return 0;
 }
