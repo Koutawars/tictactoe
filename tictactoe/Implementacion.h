@@ -8,14 +8,14 @@
 #include <iostream>
 #include <vector>
 
-class Juego
+class Implementacion
 {
 private:
-	Juego();
-	~Juego();
+	Implementacion();
+	~Implementacion();
 public:
 
-	static Juego &GetInstance(); // función para obtener un objeto de su propia clase (singleton)
+	static Implementacion &getSingleton(); // función para obtener un objeto de su propia clase (singleton)
 
 	void inicializar(); // función para inicializar variables
 	void cargarContenido(); // función para cargar el contenido

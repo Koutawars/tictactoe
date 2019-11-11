@@ -1,7 +1,7 @@
-#include "pch.h"
-#include "Juego.h"
+﻿#include "pch.h"
+#include "Implementacion.h"
 
-void Juego::inicializar() {
+void Implementacion::inicializar() {
 	dibujar = true;
 	// inicializando las variable dependiendo de la screen
 	if (screen == 0) {
@@ -12,7 +12,7 @@ void Juego::inicializar() {
 	}
 }
 
-void Juego::cargarContenido() {
+void Implementacion::cargarContenido() {
 	// cargando el contenido dependiendo de la screen
 	if (screen == 0) {
 		tipo_de_letra = al_load_font("Legend M54.ttf", 38, NULL);
@@ -39,7 +39,7 @@ void Juego::cargarContenido() {
 
 }
 
-void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
+void Implementacion::actualizar(ALLEGRO_EVENT ev, bool *terminar) {
 	// actualizando dependiendo de la screen
 	if (screen == 0) {
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
@@ -55,7 +55,7 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 							moverScreen(1);
 							break;
 						case 1:
-							*done = true;
+							*terminar = true;
 							break;
 						}
 					}
@@ -123,7 +123,7 @@ void Juego::actualizar(ALLEGRO_EVENT ev, bool *done) {
 	
 }
 
-void Juego::pintar(ALLEGRO_DISPLAY *display) {
+void Implementacion::pintar(ALLEGRO_DISPLAY *display) {
 	// dibujar dependiendo de la screen
 	if (screen == 0) {
 		al_draw_bitmap(fondoMenu, 0, 0, NULL);
@@ -153,7 +153,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				al_flip_display();
 				al_rest(1);
 				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
-				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Perdiste");
+				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Defeat");
 				al_flip_display();
 				al_rest(2);
 				moverScreen(1);
@@ -173,7 +173,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 				al_flip_display();
 				al_rest(1);
 				al_draw_filled_rectangle(320 - 100, 200, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
-				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Empate");
+				al_draw_text(tipo_de_letra2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Tie");
 				al_flip_display();
 				al_rest(2);
 				moverScreen(1);
@@ -183,7 +183,7 @@ void Juego::pintar(ALLEGRO_DISPLAY *display) {
 	}
 }
 
-void Juego::DesCargar() {
+void Implementacion::DesCargar() {
 	// quitar el contenido dependiendo de la screen
 	if (screen == 0) {
 		opciones.clear();
@@ -203,14 +203,14 @@ void Juego::DesCargar() {
 	}
 }
 
-void Juego::moverScreen(int screen) {
+void Implementacion::moverScreen(int screen) {
 	this->DesCargar();
 	this->screen = screen;
 	this->inicializar();
 	this->cargarContenido();
 }
 
-void Juego::imprimir() {
+void Implementacion::imprimir() {
 	std::cout << "-------" << std::endl;
 	for (int i = 0; i < 3; i++) {
 		std::cout << "|";
@@ -223,7 +223,7 @@ void Juego::imprimir() {
 
 }
 
-void Juego::Mov(char board[3][3]) {
+void Implementacion::Mov(char board[3][3]) {
 	int maxEval = -99999, eval, moveI, moveJ;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -243,7 +243,7 @@ void Juego::Mov(char board[3][3]) {
 	dibujar = true;
 }
 
-int Juego::Algortimo_MiniMax(char board[3][3], int prof, bool turno) {
+int Implementacion::Algortimo_MiniMax(char board[3][3], int prof, bool turno) {
 	int value = evaluar(board); // 10 = gana IA, -10 = gana jugador
 	//if (value == 10 || value == -10) return value; // otra forma de hacerlo, esto no importa el numero de pasos
 	if (value == 10) return value - prof;
@@ -281,7 +281,7 @@ int Juego::Algortimo_MiniMax(char board[3][3], int prof, bool turno) {
 	}
 }
 
-int Juego::evaluar(char tablero[3][3]) {
+int Implementacion::evaluar(char tablero[3][3]) {
 	int reg = 0;
 	if (tablero[0][0] == 'x' && tablero[0][1] == 'x' && tablero[0][2] == 'x') reg = 10;
 	if (tablero[0][0] == 'o' && tablero[0][1] == 'o' && tablero[0][2] == 'o') reg = -10;
@@ -302,7 +302,7 @@ int Juego::evaluar(char tablero[3][3]) {
 	return reg;
 }
 
-bool Juego::quedanMovimientos(char tablero[3][3]) {
+bool Implementacion::quedanMovimientos(char tablero[3][3]) {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			if (tablero[i][j] == ' ')
@@ -310,19 +310,19 @@ bool Juego::quedanMovimientos(char tablero[3][3]) {
 	return false;
 }
 
-int Juego::MAXIMO(int value1, int value2) {
+int Implementacion::MAXIMO(int value1, int value2) {
 	return value1 < value2 ? value2 : value1;
 }
 
-int Juego::MINIMO(int value1, int value2) {
+int Implementacion::MINIMO(int value1, int value2) {
 	return value1 > value2 ? value2 : value1;
 }
 
-Juego &Juego::GetInstance()
+Implementacion &Implementacion::getSingleton()
 {
-	static Juego instance;
+	static Implementacion instance;
 	return instance;
 }
 
-Juego::Juego() {}
-Juego::~Juego() {}
+Implementacion::Implementacion() {}
+Implementacion::~Implementacion() {}

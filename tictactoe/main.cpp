@@ -2,7 +2,7 @@
 #include "pch.h"
 #include <iostream>
 
-#include "Juego.h"
+#include "Implementacion.h"
 
 int main()
 {
@@ -22,8 +22,13 @@ int main()
 
 	al_init_font_addon();
 	al_init_ttf_addon();
-	Juego::GetInstance().inicializar();
-	Juego::GetInstance().cargarContenido();
+	ALLEGRO_BITMAP *icon = al_load_bitmap("icon.png");
+	al_set_display_icon(display, icon);
+	al_set_window_title(display, "Juego divertido del triqui");
+
+
+	Implementacion::getSingleton().inicializar();
+	Implementacion::getSingleton().cargarContenido();
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	ALLEGRO_TIMER *timer = al_create_timer(1.0f);
@@ -42,19 +47,15 @@ int main()
 		al_wait_for_event(event_queue, &ev);
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			done = true;
-		Juego::GetInstance().actualizar(ev, &done);
-		if (Juego::GetInstance().dibujar) {
-			Juego::GetInstance().pintar(display);
-			Juego::GetInstance().dibujar = false;
+		Implementacion::getSingleton().actualizar(ev, &done);
+		if (Implementacion::getSingleton().dibujar) {
+			Implementacion::getSingleton().pintar(display);
+			Implementacion::getSingleton().dibujar = false;
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
-
-		if (ev.type == ALLEGRO_EVENT_TIMER) {
-			// si necesito algo el contador
-		}
 	}
 
-	Juego::GetInstance().DesCargar();
+	Implementacion::getSingleton().DesCargar();
 	return 0;
 }
