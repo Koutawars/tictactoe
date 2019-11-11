@@ -19,19 +19,18 @@ void Juego::loadContent() {
 	// cargando el contenido dependiendo de la pantalla
 	switch (pantalla) {
 	case 0:
-		fuente = al_load_font("LemonMilkbold.otf", 38, NULL);
+		fuente = al_load_font("Legend M54.ttf", 38, NULL);
 		fondoMenu = al_load_bitmap("fondoMenu.png");
 		menu.push_back("Iniciar");
-		menu.push_back("Detalles");
 		menu.push_back("Salir");
-		posXMenu = 30;
-		posYMenu = 145;
-		separador = 55;
+		posXMenu = 380;
+		posYMenu = 245;
+		separador = 85;
 		select = -1; // -1 seleccionado ninguno
 		break;
 	case 1:
-		fuente = al_load_font("LemonMilkbold.otf", 30, NULL);
-		fuente2 = al_load_font("LemonMilkbold.otf", 40, NULL);
+		fuente = al_load_font("Legend M54.ttf", 30, NULL);
+		fuente2 = al_load_font("Legend M54.ttf", 40, NULL);
 		fondoMap = al_load_bitmap("mapa.png");
 		O = al_load_bitmap("O.png");
 		X = al_load_bitmap("X.png");
@@ -40,10 +39,6 @@ void Juego::loadContent() {
 				mapa[i][j] = ' ';
 			}
 		}
-		break;
-	case 2:
-		fuente = al_load_font("LemonMilkbold.otf", 30, NULL);
-		fuente2 = al_load_font("LemonMilkbold.otf", 17, NULL);
 		break;
 	}
 
@@ -66,9 +61,6 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 							cambiarPantalla(1);
 							break;
 						case 1:
-							cambiarPantalla(2);
-							break;
-						case 2:
 							*done = true;
 							break;
 						}
@@ -100,7 +92,7 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 			{
 				int mouseY = ev.mouse.y;
 				int mouseX = ev.mouse.x;
-				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
+				if (0 < mouseX && 90 > mouseX && 0 < mouseY && 46 > mouseY) {
 					cambiarPantalla(0);
 				}
 			}
@@ -135,20 +127,6 @@ void Juego::update(ALLEGRO_EVENT ev, bool *done) {
 		}
 
 		break;
-	case 2:
-		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-		{
-			if (ev.mouse.button & 1)
-			{
-				int mouseY = ev.mouse.y;
-				int mouseX = ev.mouse.x;
-				if (500 < mouseX && 640 > mouseX && 0 < mouseY && 46 > mouseY) {
-					cambiarPantalla(0);
-				}
-			}
-		}
-
-		break;
 	}
 	
 }
@@ -159,18 +137,15 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 	case 0:
 		al_draw_bitmap(fondoMenu, 0, 0, NULL);
 		for (int i = 0; i < menu.size(); i++) {
-			if (select == i) {
-				al_draw_text(fuente, al_map_rgb(0, 255, 255), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
-			}
-			else {
-				al_draw_text(fuente, al_map_rgb(255, 255, 255), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
-			}
+		
+			al_draw_text(fuente, al_map_rgb(0, 0, 0), posXMenu, (i * separador) + posYMenu, NULL, menu[i].c_str());
+		
 		}
 		break;
 	case 1: 
 		{
 			al_draw_bitmap(fondoMap, 0, 0, NULL);
-			al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
+			al_draw_text(fuente, al_map_rgb(0, 0, 0), 8, 8, NULL, "Atras");
 			int posX = 141, posY = 55, casi = 105, tam = 13;
 			for (int i = 0; i < 3; i++) {
 				for (int j = 0; j < 3; j++) {
@@ -186,7 +161,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 			if (evaluar(mapa) == 10) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
+				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
 				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Perdiste");
 				al_flip_display();
 				al_rest(2);
@@ -196,7 +171,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 			if (evaluar(mapa) == -10) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
+				al_draw_filled_rectangle(320 - 100, 210, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
 				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Usaste hacks");
 				al_flip_display();
 				al_rest(2);
@@ -206,7 +181,7 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 			if (!quedanMovimientos(mapa)) {
 				al_flip_display();
 				al_rest(1);
-				al_draw_filled_rectangle(320 - 100, 200, 320 + 80, 220 + 50, al_map_rgb(0, 98, 88));
+				al_draw_filled_rectangle(320 - 100, 200, 320 + 80, 220 + 50, al_map_rgb(0, 0, 0));
 				al_draw_text(fuente2, al_map_rgb(255, 255, 255), 320, 215, ALLEGRO_ALIGN_CENTER, "Empate");
 				al_flip_display();
 				al_rest(2);
@@ -214,10 +189,6 @@ void Juego::draw(ALLEGRO_DISPLAY *display) {
 				draw(display);
 			}
 		}
-		break;
-	case 2:
-		al_draw_text(fuente, al_map_rgb(255, 255, 255), 500, 8, NULL, "Atras");
-		al_draw_multiline_text(fuente2, al_map_rgb(255, 255, 255), 310, 100, 520, 30, ALLEGRO_ALIGN_CENTER, "Tres en rayas, Gato, tictactoe o triqui es un juego donde un jugador gana si coloca tres en linea del mismo simbolo, este juego tiene una inteligencia artificial hecha con el algoritmo del minimax. \n Desarrollado por: \nJorge Alberto Silva Zambrano - 2013214121\nAndres Alberto Ibarra Paez - 2016114069\nAndres Felipe Brieva Pinedo 2016214048\n");
 		break;
 	}
 }
